@@ -1,0 +1,320 @@
+--[[
+    Script Name: DelK-Hub
+    Version: 1.0.0
+    Author: [Mmb]
+    Game: Blox Fruits
+    Description: Tự động farm, quest, boss và nâng cấp
+    
+    Chú ý: Script này chỉ là Beta
+]]
+
+-- Metadata và thông tin script
+local ScriptInfo = {
+    Name = "Delk-Hub",
+    Version = "1.0.0",
+    LastUpdated = "2024-07-01",
+    SupportedGameVersion = "1.5.0",
+    Disclaimer = "Chỉ sử dụng cho mục đích test"
+}
+
+-- Kiểm tra game hợp lệ
+local function validateGame()
+    local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+    if gameName ~= "Blox Fruits" then
+        error("Script chỉ hoạt động với game Blox Fruits")
+        return false
+    end
+    return true
+end
+
+-- Thêm hàm log để theo dõi hoạt động
+local function scriptLog(message)
+    print(string.format("[%s - v%s] %s", 
+        ScriptInfo.Name, 
+        ScriptInfo.Version, 
+        message)
+    )
+end
+
+-- Kiểm tra môi trường thực thi
+local function checkEnvironment()
+    if not game or not game:GetService("Players").LocalPlayer then
+        scriptLog("Môi trường không hợp lệ")
+        return false
+    end
+    return true
+end
+
+-- Các service và biến chính
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local rootPart = character:WaitForChild("HumanRoot")
+
+-- Cấu hình mặc định
+local settings = {
+    AutoFarm = {
+        Enabled = false,
+        MinLevel = 1,
+        MaxLevel = 100,
+        SelectedArea = "First Sea"
+    },
+    AutoQuest = {
+        Enabled = false,
+        QuestType = "Kill",
+        TargetNPC = ""
+    },
+    AutoBoss = {
+        Enabled = false,
+        SelectedBoss = "",
+        RepeatTimes = 5
+    },
+    -- Các cấu hình khác giữ nguyên như script cũ
+}
+
+-- Hàm khởi tạo script
+local function initializeScript()
+    if not validateGame() or not checkEnvironment() then
+        return
+    end
+    
+    scriptLog("Script đã được khởi tạo thành công")
+end
+
+-- Giao diện người dùng (giữ nguyên như script cũ)
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local window = library.CreateLib(ScriptInfo.Name, "DarkTheme")
+
+-- Thêm thông tin phiên bản vào giao diện
+local infoTab = window:NewTab("Script Info")
+local infoSection = infoTab:NewSection("Thông Tin Script")
+infoSection:NewLabel("Tên: " .. ScriptInfo.Name)
+infoSection:NewLabel("Phiên Bản: " .. ScriptInfo.Version)
+infoSection:NewLabel("Ngày Cập Nhật: " .. ScriptInfo.LastUpdated)
+
+-- Nút kiểm tra cập nhật
+local updateButton = infoTab:NewButton("Kiểm Tra Cập Nhật", "Kiểm tra phiên bản mới", function()
+    -- Logic kiểm tra cập nhật (có thể thêm sau)
+    scriptLog("Đang kiểm tra cập nhật...")
+end)
+
+-- Khởi chạy script
+initializeScript()
+-- Các tab chức năng
+local farmTab = window:NewTab("Auto Farm")
+local questTab = window:NewTab("Quest")
+local bossTab = window:NewTab("Boss")
+local fruitTab = window:NewTab("Fruit")
+local swordTab = window:NewTab("Sword")
+
+-- Các section
+local farmSection = farmTab:NewSection("Farm Settings")
+farmSection:NewToggle("Auto Farm", "Tự động farm điểm", function(state)
+    settings.AutoFarm = state
+    if state then farmPoints() end
+end)
+
+-- Các section tương tự cho quest, boss, fruit, sword
+
+-- Nút chạy
+local runButton = farmTab:NewButton("Start", "Bắt đầu hack", function()
+    farmPoints()
+    autoQuest()
+    autoBoss()
+    selectFruit()
+    upgradeSword()
+end)
+
+-- Hàm chọn trái ác quỷ
+function selectFruit()
+    if settings.AutoFruit then
+        local fruitFolder = workspace.Fruits
+        for _, fruit in pairs(fruitFolder:GetChildren()) do
+            if fruit.Name == settings.SelectedFruit then
+                humanoid:MoveTo(fruit.Position)
+                wait(0.5)
+                fireproximityprompt(fruit.ProximityPrompt)
+            end
+        end
+    end
+end
+
+-- Hàm nâng cấp kiếm
+function upgradeSword()
+    if settings.AutoSword then
+        local shop = game.Workspace.Shop
+        local swordShop = shop:FindFirstChild("SwordShop")
+        
+        if swordShop then
+            humanoid:MoveTo(swordShop.Position)
+            wait(0.5)
+            fireproximityprompt(swordShop.ProximityPrompt)
+            
+            -- Chọn kiếm
+            local swordMenu = game.Players.LocalPlayer.PlayerGui.SwordMenu
+            swordMenu:FindFirstChild(settings.SelectedSword):Click()
+        end
+    end
+end
+
+-- Hàm nâng cấp kiếm
+function upgradeSword()
+    if settings.AutoSword then
+        local shop = game.Workspace.Shop
+        local swordShop = shop:FindFirstChild("SwordShop")
+        
+        if swordShop then
+            humanoid:MoveTo(swordShop.Position)
+            wait(0.5)
+            fireproximityprompt(swordShop.ProximityPrompt)
+            
+            -- Chọn kiếm
+            local swordMenu = game.Players.LocalPlayer.PlayerGui.SwordMenu
+            swordMenu:FindFirstChild(settings.SelectedSword):Click()
+        end
+    end
+end
+
+-- Hàm nâng cấp kiếm
+function upgradeSword()
+    if settings.AutoSword then
+        local shop = game.Workspace.Shop
+        local swordShop = shop:FindFirstChild("SwordShop")
+        
+        if swordShop then
+            humanoid:MoveTo(swordShop.Position)
+            wait(0.5)
+            fireproximityprompt(swordShop.ProximityPrompt)
+            
+            -- Chọn kiếm
+            local swordMenu = game.Players.LocalPlayer.PlayerGui.SwordMenu
+            swordMenu:FindFirstChild(settings.SelectedSword):Click()
+        end
+    end
+end
+
+-- Enhanced Error Handling
+local function safeExecute(func)
+    local success, err = pcall(func)
+    if not success then
+        scriptLog("Error: " .. tostring(err))
+        return false
+    end
+    return true
+end
+
+-- More Robust Configuration Management
+local ConfigManager = {
+    defaultSettings = {
+        AutoFarm = {
+            Enabled = false,
+            MinLevel = 1,
+            MaxLevel = 100,
+            SelectedArea = "First Sea"
+        },
+        -- Other settings...
+    },
+    
+    loadSettings = function(self)
+        local savedConfig = readfile("delk_hub_config.json")
+        return savedConfig and 
+            game:GetService("HttpService"):JSONDecode(savedConfig) or 
+            self.defaultSettings
+    end,
+    
+    saveSettings = function(self, newSettings)
+        writefile("delk_hub_config.json", 
+            game:GetService("HttpService"):JSONEncode(newSettings))
+    end
+}
+
+-- Advanced Logging System
+local Logger = {
+    logFile = "delk_hub_logs.txt",
+    
+    log = function(self, message, logLevel)
+        local timestamp = os.date("%Y-%m-%d %H:%M:%S")
+        local logEntry = string.format("[%s] [%s] %s\n", 
+            timestamp, 
+            logLevel or "INFO", 
+            message)
+        
+        appendfile(self.logFile, logEntry)
+        print(logEntry)
+    end
+}
+
+-- Performance Monitoring
+local function monitorPerformance()
+    local startTime = tick()
+    
+    -- Periodic performance check
+    spawn(function()
+        while true do
+            local currentMemory = collectgarbage("count")
+            local elapsedTime = tick() - startTime
+            
+            if currentMemory > 100000 then  -- Memory threshold
+                Logger:log("High memory usage detected", "WARNING")
+                collectgarbage()
+            end
+            
+            wait(60)  -- Check every minute
+        end
+    end)
+end
+
+-- Network Stability Check
+local function checkNetworkStability()
+    local HttpService = game:GetService("HttpService")
+    
+    local function pingServer()
+        local success, response = pcall(function()
+            return HttpService:GetHttpEnabled() and 
+                   HttpService:JSONDecode(
+                     game:HttpGet("https://api.example.com/ping")
+                   )
+        end)
+        
+        return success
+    end
+    
+    spawn(function()
+        while true do
+            if not pingServer() then
+                Logger:log("Network unstable, attempting reconnect", "ERROR")
+                wait(5)
+            end
+            wait(30)
+        end
+    end)
+end
+
+-- Enhanced Initialization
+local function enhancedInitialize()
+    safeExecute(validateGame)
+    safeExecute(checkEnvironment)
+    
+    settings = ConfigManager:loadSettings()
+    
+    monitorPerformance()
+    checkNetworkStability()
+    
+    Logger:log("Script initialized successfully", "INFO")
+end
+
+-- Anti-Cheat Protection (Basic)
+local function antiCheatProtection()
+    -- Implement basic anti-detection mechanisms
+    if identifyexecutor then
+        local executor = identifyexecutor()
+        if not table.find({"Synapse", "Script-Ware"}, executor) then
+            error("Unsupported executor")
+        end
+    end
+end
+
+-- Call enhanced initialization
+enhancedInitialize()
+antiCheatProtection()
